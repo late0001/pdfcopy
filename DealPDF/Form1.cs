@@ -179,6 +179,7 @@ namespace DealPDF
         /// </summary>
         private void btnCopyToClipboard_Click(object sender, EventArgs e)
         {
+            _processedText = textBox1.Text;
             if (!string.IsNullOrEmpty(_processedText))
             {
                 Clipboard.SetText(_processedText);
