@@ -183,11 +183,13 @@ namespace DealPDF
             if (!string.IsNullOrEmpty(_processedText))
             {
                 Clipboard.SetText(_processedText);
-                MessageBox.Show("已复制到剪贴板！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show("已复制到剪贴板！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // 状态栏显示成功提示，2秒后自动清空
+                ShowStatusMessage("✅ 已复制到剪贴板");
             }
             else
             {
-                MessageBox.Show("暂无处理后的文本", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowStatusMessage("⚠️ 文本框为空，无需复制");
             }
         }
 
@@ -198,6 +200,26 @@ namespace DealPDF
         {
             textBox1.Clear();
             textBox1.Focus();
+        }
+
+        /// <summary>
+        /// 在状态栏显示消息，并自动清空
+        /// </summary>
+        private void ShowStatusMessage(string message)
+        {
+            // 显示消息
+            toolStripStatusLabel1.Text = message;
+
+            // 开启一个定时任务，2 秒后清空状态栏（不卡界面）
+            Timer timer = new Timer();
+            timer.Interval = 2000;
+            timer.Tick += (s, e) =>
+            {
+                toolStripStatusLabel1.Text = "";
+                timer.Stop();
+                timer.Dispose();
+            };
+            timer.Start();
         }
     }
 }
